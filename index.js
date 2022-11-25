@@ -25,6 +25,12 @@ var current = today;
 function init() {
   create_nav_buttons();
   display_days();
+  
+  $("#currentEventsDiv").hide();
+  $('#addEventForm').hide();
+  $('#addEventButton').on('click', showEventForm);
+  $('#submitButton').on('click', addEvent);
+  $('#cancelButton').on('click', cancelEventAdd);
 }
 
 $(document).ready(init);
@@ -53,10 +59,6 @@ function create_nav_buttons() {
   $('#next_month').text(format(addMonths(current, +1), 'MMMM'));
   $('nav h2').text(format(current, 'MMMM'));
   $('nav h1').text(format_(current));
-  $('#addEventForm').hide();
-  $('#addEventButton').on('click', showEventForm);
-  $('#submitButton').on('click', addEvent);
-  $('#cancelButton').on('click', cancelEventAdd);
 }
 
 var savedEvents = [];
@@ -91,4 +93,29 @@ function cancelEventAdd() {
 
 function showEventForm() {
   $('#addEventForm').show();
+}
+
+function showCurrentEvents(selectedDay){
+  let currentEvents=[];
+  for (let elt of savedEvents){
+    let presence=0;
+    for (let day of eachDayOfInterval({start:elt['startDate'],end:elt['endDate']})){
+      if (isSameDay(selectedDay,day)){
+        presence=1;
+      }
+    }
+    if (presence==1){
+      currentEvents.append(elt);
+    }
+  }
+  for (let elt of currentEvents){
+    let newElt=$('<div>');
+    newElt.addClass('eventDetails');
+    newElt.innerHTML='<span>'+elt[title]+'</span>';
+    newElt.innerHTML+='<span>Début: '+elt[startDate]+'</span>';
+    newElt.innerHTML+='<span>Fin: '+elt[endDate]+'</span>';
+    newElt.innerHTML+='<span>Description: '+elt[description]+'</span>';
+    $("#currentEventsDiv").append(newElt);
+  }
+  $("#currentEventsDiv").show();
 }
