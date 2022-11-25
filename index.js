@@ -14,6 +14,7 @@ import {
   getYear,
   startOfMonth,
   startOfWeek,
+  isSameDay,
 } from 'date-fns';
 
 const format_style = 'eeee dd MMMM yyyy';
@@ -21,7 +22,7 @@ const format_ = (date) => format(date, format_style);
 
 const today = new Date();
 var current = today;
-var savedEvents = [];
+var savedEvents = new Array();
 
 $('nav button').on('click', change_current_month);
 
@@ -34,10 +35,10 @@ function init() {
   $('#addEventButton').on('click', showEventForm);
   $('#submitButton').on('click', addEvent);
   $('#cancelButton').on('click', cancelEventAdd);
-  
+
   $('.day').on('click', change_current_day);
   $('.day').on('click', showCurrentEvents);
-  
+
   console.log(format_(current));
 }
 
@@ -58,7 +59,8 @@ function change_current_day() {
 
 function change_current_month() {
   var id_ = $(this).attr('id');
-  current = id_ == 'last_month' ? addMonths(current, -1) : addMonths(current, 1);
+  current =
+    id_ == 'last_month' ? addMonths(current, -1) : addMonths(current, 1);
   init();
 }
 
@@ -89,7 +91,6 @@ function filter_by_days(arr) {
   return all;
 }
 
-
 function change_current_day() {
   var obj = $(this);
   current = new Date(getYear(today), obj.attr('value'), obj[0].innerHTML);
@@ -98,7 +99,8 @@ function change_current_day() {
 
 function change_current_month() {
   var id_ = $(this).attr('id');
-  current = id_ == 'last_month' ? addMonths(current, -1) : addMonths(current, 1);
+  current =
+    id_ == 'last_month' ? addMonths(current, -1) : addMonths(current, 1);
   init();
 }
 
@@ -160,7 +162,7 @@ function showEventForm() {
   $('#addEventForm').show();
 }
 
-function showCurrentEvents(selectedDay) {
+function showCurrentEvents() {
   let currentEvents = [];
   for (let elt of savedEvents) {
     let presence = 0;
@@ -168,7 +170,7 @@ function showCurrentEvents(selectedDay) {
       start: elt['startDate'],
       end: elt['endDate'],
     })) {
-      if (isSameDay(selectedDay, day)) {
+      if (isSameDay(current, day)) {
         presence = 1;
       }
     }
@@ -188,10 +190,9 @@ function showCurrentEvents(selectedDay) {
   $('#currentEventsDiv').show();
 }
 
-function isEventful(selectedDay){
-  let currentEvents = [];
+function isEventful(selectedDay) {
+  let presence = false;
   for (let elt of savedEvents) {
-    let presence = false;
     for (let day of eachDayOfInterval({
       start: elt['startDate'],
       end: elt['endDate'],
