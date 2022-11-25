@@ -30,24 +30,27 @@ function init() {
 $(document).ready(init);
 
 function display_month() {
+  $('section').empty();
   let month_arr = filter_by_days(get_days());
-  display_week(month_arr[2]);
+  Object.values(month_arr).map((elt) => display_week(elt));
+  console.log($('section'));
 }
 
 function display_week(week_arr) {
   console.log(week_arr.map((elt) => format_(elt)));
   let div_arr = week_arr.map(
     (elt) =>
-      `<button value='${getDate(elt)}' class='day'> ${getDate(elt)} </button>`
+      `<button value='${getMonth(elt)}' class='day'> ${getDate(elt)} </button>`
   );
-  console.log(div_arr);
 
   div_arr = div_arr.reduce(create_week_container);
-  console.log(div_arr);
 
-  let week = format(getDay(week_arr[0]), 'EEEE');
+  var day_week = format(getDay(week_arr[0]), 'EEEE');
 
-  $('section').html(`<div id=${week}> ${div_arr} </div>`);
+  console.log(day_week);
+
+  $('section').append(`<div id=${day_week}> 
+  <h3>${day_week}</h3> <div> ${div_arr} </div> </div>`);
 }
 
 function create_week_container(total, string_day) {
