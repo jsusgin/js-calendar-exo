@@ -24,14 +24,42 @@ var current = today;
 
 function init() {
   create_nav_buttons();
-  display_days();
+  display_month();
 }
 
 $(document).ready(init);
 
-function display_days() {
-  let days_arr = get_days();
-  console.log(days_arr.map((elt) => format_(elt)));
+function display_month() {
+  let month_arr = filter_by_days(get_days());
+  display_week(month_arr[2]);
+}
+
+function display_week(week_arr) {
+  console.log(week_arr.map((elt) => format_(elt)));
+  let div_arr = week_arr.map(
+    (elt) =>
+      `<button value='${getDate(elt)}' class='day'> ${getDate(elt)} </button>`
+  );
+  console.log(div_arr);
+
+  div_arr = div_arr.reduce(create_week_container);
+  console.log(div_arr);
+
+  let week = format(getDay(week_arr[0]), 'EEEE');
+
+  $('section').html(`<div id=${week}> ${div_arr} </div>`);
+}
+
+function create_week_container(total, string_day) {
+  return total + '\n' + string_day;
+}
+
+function filter_by_days(arr) {
+  let all = {};
+  for (let i = 0; i < 7; i++) {
+    all[i] = arr.filter((elt) => getDay(elt) == i);
+  }
+  return all;
 }
 
 function get_days() {
