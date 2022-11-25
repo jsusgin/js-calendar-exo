@@ -31,6 +31,10 @@ function init() {
   $('#addEventButton').on('click', showEventForm);
   $('#submitButton').on('click', addEvent);
   $('#cancelButton').on('click', cancelEventAdd);
+
+  $('.day').on('click', change_current_day);
+
+  console.log(format_(current));
 }
 
 $(document).ready(init);
@@ -39,11 +43,17 @@ function display_month() {
   $('section').empty();
   let month_arr = filter_by_days(get_days());
   Object.values(month_arr).map((elt) => display_week(elt));
-  console.log($('section'));
+  //console.log($('section'));
+}
+
+function change_current_day() {
+  var obj = $(this);
+  current = new Date(getYear(today), obj.attr('value'), obj[0].innerHTML);
+  init();
 }
 
 function display_week(week_arr) {
-  console.log(week_arr.map((elt) => format_(elt)));
+  //console.log(week_arr.map((elt) => format_(elt)));
   let div_arr = week_arr.map(
     (elt) =>
       `<button value='${getMonth(elt)}' class='day'> ${getDate(elt)} </button>`
@@ -71,7 +81,7 @@ function filter_by_days(arr) {
 
 function display_days() {
   let days_arr = get_days();
-  console.log(days_arr.map((elt) => format_(elt)));
+  //console.log(days_arr.map((elt) => format_(elt)));
 }
 
 function get_days() {
