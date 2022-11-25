@@ -24,9 +24,9 @@ var current = today;
 
 function init() {
   create_nav_buttons();
-  display_days();
-  
-  $("#currentEventsDiv").hide();
+  display_month();
+
+  $('#currentEventsDiv').hide();
   $('#addEventForm').hide();
   $('#addEventButton').on('click', showEventForm);
   $('#submitButton').on('click', addEvent);
@@ -34,6 +34,40 @@ function init() {
 }
 
 $(document).ready(init);
+
+function display_month() {
+  $('section').empty();
+  let month_arr = filter_by_days(get_days());
+  Object.values(month_arr).map((elt) => display_week(elt));
+  console.log($('section'));
+}
+
+function display_week(week_arr) {
+  console.log(week_arr.map((elt) => format_(elt)));
+  let div_arr = week_arr.map(
+    (elt) =>
+      `<button value='${getMonth(elt)}' class='day'> ${getDate(elt)} </button>`
+  );
+
+  div_arr = div_arr.reduce(create_week_container);
+
+  var day_week = format(week_arr[0], 'EEEE');
+
+  $('section').append(`<div id=${day_week}> 
+  <h3>${day_week}</h3> <div> ${div_arr} </div> </div>`);
+}
+
+function create_week_container(total, string_day) {
+  return total + '\n' + string_day;
+}
+
+function filter_by_days(arr) {
+  let all = {};
+  for (let i = 0; i < 7; i++) {
+    all[i] = arr.filter((elt) => getDay(elt) == i);
+  }
+  return all;
+}
 
 function display_days() {
   let days_arr = get_days();
@@ -89,33 +123,34 @@ function cancelEventAdd() {
   $('#addEventForm').hide();
 }
 
-
-
 function showEventForm() {
   $('#addEventForm').show();
 }
 
-function showCurrentEvents(selectedDay){
-  let currentEvents=[];
-  for (let elt of savedEvents){
-    let presence=0;
-    for (let day of eachDayOfInterval({start:elt['startDate'],end:elt['endDate']})){
-      if (isSameDay(selectedDay,day)){
-        presence=1;
+function showCurrentEvents(selectedDay) {
+  let currentEvents = [];
+  for (let elt of savedEvents) {
+    let presence = 0;
+    for (let day of eachDayOfInterval({
+      start: elt['startDate'],
+      end: elt['endDate'],
+    })) {
+      if (isSameDay(selectedDay, day)) {
+        presence = 1;
       }
     }
-    if (presence==1){
+    if (presence == 1) {
       currentEvents.append(elt);
     }
   }
-  for (let elt of currentEvents){
-    let newElt=$('<div>');
+  for (let elt of currentEvents) {
+    let newElt = $('<div>');
     newElt.addClass('eventDetails');
-    newElt.innerHTML='<span>'+elt[title]+'</span>';
-    newElt.innerHTML+='<span>Début: '+elt[startDate]+'</span>';
-    newElt.innerHTML+='<span>Fin: '+elt[endDate]+'</span>';
-    newElt.innerHTML+='<span>Description: '+elt[description]+'</span>';
-    $("#currentEventsDiv").append(newElt);
+    newElt.innerHTML = '<span>' + elt[title] + '</span>';
+    newElt.innerHTML += '<span>Début: ' + elt[startDate] + '</span>';
+    newElt.innerHTML += '<span>Fin: ' + elt[endDate] + '</span>';
+    newElt.innerHTML += '<span>Description: ' + elt[description] + '</span>';
+    $('#currentEventsDiv').append(newElt);
   }
-  $("#currentEventsDiv").show();
+  $('#currentEventsDiv').show();
 }
