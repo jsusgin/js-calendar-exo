@@ -45,7 +45,7 @@ function display_month() {
   $('section').empty();
   let month_arr = filter_by_days(get_days());
   Object.values(month_arr).map((elt) => display_week(elt));
-  //console.log($('section'));
+  console.log($('section'));
 }
 
 function change_current_day() {
@@ -64,7 +64,7 @@ function display_week(week_arr) {
   //console.log(week_arr.map((elt) => format_(elt)));
   let div_arr = week_arr.map(
     (elt) =>
-      `<button value='${getMonth(elt)}' class='day'> ${getDate(elt)} </button>`
+      `<button value='${getMonth(elt)}' class='day'>${getDate(elt)}</button>`
   );
 
   div_arr = div_arr.reduce(create_week_container);
