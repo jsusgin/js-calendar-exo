@@ -172,3 +172,19 @@ function showCurrentEvents(selectedDay) {
   }
   $('#currentEventsDiv').show();
 }
+
+function isEventful(selectedDay){
+  let currentEvents = [];
+  for (let elt of savedEvents) {
+    let presence = false;
+    for (let day of eachDayOfInterval({
+    start: elt['startDate'],
+    end: elt['endDate'],
+    })) {
+      if (isSameDay(selectedDay, day)) {
+      presence = true;
+      }
+    }
+  }
+  return presence;
+}
