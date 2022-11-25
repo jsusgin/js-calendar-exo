@@ -21,6 +21,7 @@ const format_ = (date) => format(date, format_style);
 
 const today = new Date();
 var current = today;
+var savedEvents = [];
 
 $('nav button').on('click', change_current_month);
 
@@ -35,6 +36,7 @@ function init() {
   $('#cancelButton').on('click', cancelEventAdd);
   
   $('.day').on('click', change_current_day);
+  $('.day').on('click', showCurrentEvents);
   
   console.log(format_(current));
 }
@@ -85,6 +87,19 @@ function filter_by_days(arr) {
     all[i] = arr.filter((elt) => getDay(elt) == i);
   }
   return all;
+}
+
+
+function change_current_day() {
+  var obj = $(this);
+  current = new Date(getYear(today), obj.attr('value'), obj[0].innerHTML);
+  init();
+}
+
+function change_current_month() {
+  var id_ = $(this).attr('id');
+  current = id_ == 'last_month' ? addMonths(current, -1) : addMonths(current, 1);
+  init();
 }
 
 function display_days() {
@@ -171,4 +186,20 @@ function showCurrentEvents(selectedDay) {
     $('#currentEventsDiv').append(newElt);
   }
   $('#currentEventsDiv').show();
+}
+
+function isEventful(selectedDay){
+  let currentEvents = [];
+  for (let elt of savedEvents) {
+    let presence = false;
+    for (let day of eachDayOfInterval({
+      start: elt['startDate'],
+      end: elt['endDate'],
+    })) {
+      if (isSameDay(selectedDay, day)) {
+        presence = true;
+      }
+    }
+  }
+  return presence;
 }
