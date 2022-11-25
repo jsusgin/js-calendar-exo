@@ -20,7 +20,26 @@
       <h2></h2>
       <button id="next_month"></button>
     </nav>
+    <button id="addEventButton" >
+    Ajouter un évènement
+    </button>
 
+    <div id="addEventForm">
+      <form>
+        <label for="eventName">Titre le l'évènement</label>
+        <input name="eventName" id="eventName" />
+        <label for="startDate">Date de début</label>
+        <input name="startDate" type="date" id="startDate" />
+        <label for="endDate">Date de fin</label>
+        <input name="endDate" type="date" id="endDate" />
+        <label for="description">Description</label>
+        <input name="description" id="description" />
+        <button type="submit" id="submitButton" >
+          Ajouter
+        </button>
+        <button id="cancelButton">Annuler</button>
+      </form>
+    </div>
     <section></section>
   </body>
 </html>

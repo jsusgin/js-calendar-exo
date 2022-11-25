@@ -53,4 +53,43 @@ function create_nav_buttons() {
   $('#next_month').text(format(addMonths(current, +1), 'MMMM'));
   $('nav h2').text(format(current, 'MMMM'));
   $('nav h1').text(format_(current));
+  $('#addEventForm').hide();
+  $('#addEventButton').on('click', showEventForm);
+  $('#submitButton').on('click', addEvent);
+  $('#cancelButton').on('click', cancelEventAdd);
+}
+
+var savedEvents = [];
+
+function addEvent(evt) {
+  evt.preventDefault();
+
+  let newEvent = {
+    title: $('#title').val(),
+    startDate: new Date($('#startDate').val()),
+    endDate: new Date($('#endDate').val()),
+    description: $('#description').val(),
+  };
+  if (newEvent['startDate'].getTime() <= newEvent['endDate'].getTime()) {
+    savedEvents.push(newEvent);
+  } else {
+    window.alert('La date de fin doit arriver après la date de début');
+  }
+  localStorage.setItem('contactStorage', JSON.stringify(savedEvents));
+  $('#addEventForm').hide();
+}
+
+function cancelEventAdd() {
+  $('#title').val('');
+  $('#startDate').val('');
+  $('#endDate').val('');
+  $('#description').val('');
+  $('#addEventForm').hide();
+}
+
+
+
+function showEventForm() {
+  console.log('allo?');
+  $('#addEventForm').show();
 }
