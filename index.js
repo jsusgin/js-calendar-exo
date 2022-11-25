@@ -90,6 +90,5 @@ function cancelEventAdd() {
 
 
 function showEventForm() {
-  console.log('allo?');
   $('#addEventForm').show();
 }
