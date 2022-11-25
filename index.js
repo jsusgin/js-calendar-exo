@@ -22,6 +22,8 @@ const format_ = (date) => format(date, format_style);
 const today = new Date();
 var current = today;
 
+$('nav button').on('click', change_current_month);
+
 function init() {
   create_nav_buttons();
   display_month();
@@ -31,9 +33,9 @@ function init() {
   $('#addEventButton').on('click', showEventForm);
   $('#submitButton').on('click', addEvent);
   $('#cancelButton').on('click', cancelEventAdd);
-
+  
   $('.day').on('click', change_current_day);
-
+  
   console.log(format_(current));
 }
 
@@ -49,6 +51,12 @@ function display_month() {
 function change_current_day() {
   var obj = $(this);
   current = new Date(getYear(today), obj.attr('value'), obj[0].innerHTML);
+  init();
+}
+
+function change_current_month() {
+  var id_ = $(this).attr('id');
+  current = id_ == 'last_month' ? addMonths(current, -1) : addMonths(current, 1);
   init();
 }
 
