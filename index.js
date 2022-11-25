@@ -22,7 +22,7 @@ const format_ = (date) => format(date, format_style);
 
 const today = new Date();
 var current = today;
-var savedEvents = new Array();
+var savedEvents = new Array(0);
 
 $('nav button').on('click', change_current_month);
 
@@ -130,7 +130,6 @@ function create_nav_buttons() {
   $('nav h1').text(format_(current));
 }
 
-var savedEvents = [];
 
 function addEvent(evt) {
   evt.preventDefault();
