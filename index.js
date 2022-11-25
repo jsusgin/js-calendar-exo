@@ -45,9 +45,7 @@ function display_week(week_arr) {
 
   div_arr = div_arr.reduce(create_week_container);
 
-  var day_week = format(getDay(week_arr[0]), 'EEEE');
-
-  console.log(day_week);
+  var day_week = format(week_arr[0], 'EEEE');
 
   $('section').append(`<div id=${day_week}> 
   <h3>${day_week}</h3> <div> ${div_arr} </div> </div>`);
